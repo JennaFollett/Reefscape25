@@ -36,6 +36,7 @@ public final class Constants {
     public static final int kTestDriveTrainBackRightPower = 6;
     public static final int kTestDriveTrainBackRightTurn = 7;
     public static final int kTestDriveTrainBackRightEncoder = 23;
+    public static final int kIntakeMotor = 17;
     public static final int kLiftFrontMotor = 18;
     public static final int kLiftBackMotor = 19;
     public static final int kTestarmMotor = 20;

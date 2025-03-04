@@ -21,6 +21,12 @@
           "data": {
             "name": "DropCoral 1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
         }
       ]
     }
