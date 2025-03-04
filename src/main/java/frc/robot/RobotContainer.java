@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -20,6 +20,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.TestDriveTrain;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -46,11 +48,13 @@ public class RobotContainer {
       private final CommandXboxController m_copilotController =
       new CommandXboxController(OperatorConstants.kCopilotControllerPort);
       
-
+//private final SendableChooser<Command> autoChooser;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    //   autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+    //SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   /**
@@ -90,6 +94,8 @@ m_copilotController.povDown().whileTrue(new RunCommand(()->m_cage.Run(-0.2), m_c
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    //return autoChooser.getSelected();
+    return null;
   }
+
 }

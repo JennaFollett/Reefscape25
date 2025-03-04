@@ -2,20 +2,29 @@ package frc.robot.subsystems;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
-import frc.robot.Constants.DriveConstants;;
+import frc.robot.Constants.DriveConstants;
 
 public class TestDriveTrain extends DriveTrainBase {
-    private static final double kMaxSpeedMetersPerSecond = 4;
-    private AHRS m_gyro = new AHRS(NavXComType.kUSB1);
+    private static final double kMaxSpeedMetersPerSecond = 3.81;
+    private AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
 
  private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
  //private final Translation2d m_frontLeftLocation = new Translation2d(-0.381, 0.381);
@@ -65,7 +74,39 @@ public class TestDriveTrain extends DriveTrainBase {
       public TestDriveTrain(){
         ShuffleboardTab SwerveTab = Shuffleboard.getTab("Swerve");
         SwerveTab.add("Gyro", m_gyro);
+    try{
+      RobotConfig config = RobotConfig.fromGUISettings();
 
+      // Configure AutoBuilder
+      AutoBuilder.configure(
+        this::getPose, 
+        this::resetPose, 
+        this::getSpeeds, 
+        this::driveRobotRelative, 
+        new PPHolonomicDriveController(
+          Constants.Swerve.translationConstants,
+          Constants.Swerve.rotationConstants
+        ),
+        config,
+        () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+        },
+        this
+      );
+    }catch(Exception e){
+      DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+    }
+    PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
+
+  
 
       }
       public void periodic() {
@@ -125,5 +166,39 @@ public class TestDriveTrain extends DriveTrainBase {
     double getMaxSpeedMetersPerSecond() {
         return kMaxSpeedMetersPerSecond;
     }
-    
+     public SwerveModuleState[] getModuleStates() {
+      SwerveModuleState[] state = {
+        getFrontLeftModule().getState(),
+        getFrontRightModule().getState(),
+        getBackLeftModule().getState(),
+        getBackRightModule().getState()
+      };
+       return state;
+     }
+    public SwerveModulePosition[] getPositions() {
+      SwerveModulePosition[] positions = {
+        getFrontLeftModule().getPosition(),
+        getFrontRightModule().getPosition(),
+        getBackLeftModule().getPosition(),
+        getBackRightModule().getPosition()
+      };
+       return positions;
+    }
+    Pose2d getPose(){
+      return m_odometry.getPoseMeters();
+      
+         }
+         void resetPose(Pose2d Pose){
+          m_odometry.resetPosition(m_gyro.getRotation2d(), getPositions(), Pose);
+         }
+          public ChassisSpeeds getSpeeds() {
+    return m_kinematics.toChassisSpeeds(getModuleStates());
+  }
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    SwerveModuleState[] targetStates = m_kinematics.toSwerveModuleStates(targetSpeeds);
+    setStates(targetStates);
+  }
+  
 }

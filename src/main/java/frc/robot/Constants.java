@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -60,16 +60,21 @@ public final class Constants {
    // public static final double kTurningEncoderDistancePerPulse =
         // Assumes the encoders are on a 1:1 reduction with the module shaft.
    //     (2 * Math.PI) / kEncoderCPR;
-   public static final double kWheelDiameterInches=3.6;
-   public static final double kWheelDiameterFeet=kWheelDiameterInches / 12;
+   public static final double kWheelDiameterInches=4;
+   public static final double kWheelDiameterFeet=kWheelDiameterInches / 12.0;
    public static final double kWheelCircumfrenceFeet=kWheelDiameterFeet * Math.PI;
    public static final double kWheelCircumfrenceMeters=kWheelCircumfrenceFeet / 3.28;
    public static final double kMotorRPM2MPS=kWheelCircumfrenceMeters * (1 / 60.0);
+   public static final double kDriveMotorticks2mps=kWheelCircumfrenceMeters * (1.0 / 8.14)*(1 / 60.0);
     public static final double kPModuleTurningController = 0.25;
-
+    public static final double kDriveMotorConversionFactor = (1.0 / 8.14) * kWheelCircumfrenceMeters;
     public static final double kPModuleDriveController = 0.01;
     public static final double kIModuleDriveController = 0.00;
     public static final double kFFModuleDriveController = 0.225;
   }
+public static final class Swerve{
+  public static final PIDConstants translationConstants = new PIDConstants(0.5, 0.0, 0.0);
+  public static final PIDConstants rotationConstants = new PIDConstants(0.5, 0.0, 0.0);
 
+}
 }

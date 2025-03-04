@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
 public class Lift extends SubsystemBase{
+    //reverse the front
     SparkFlex m_frontSpark = new SparkFlex(CANIds.kLiftFrontMotor, MotorType.kBrushless);
     SparkFlex m_backSpark = new SparkFlex(CANIds.kLiftBackMotor, MotorType.kBrushless);
     SparkClosedLoopController m_controllerleft = m_frontSpark.getClosedLoopController();
@@ -33,17 +34,24 @@ public static final double positionNet = 60;
 //ShuffleboardTab LiftTab = Shuffleboard.getTab("Lift");
 //LiftTab.add("Lift Motor", m_liftSpark);
 //LiftTab.addDouble("Turn PID SP" ,()-> m_controller. );
-SparkFlexConfig config = new SparkFlexConfig();
+SparkFlexConfig front = new SparkFlexConfig();
+SparkFlexConfig back = new SparkFlexConfig();
 
 // Set PID gains
-config.closedLoop
+front.closedLoop
     .p(0.1)
     .i(0)
     .d(0)
     .outputRange(-0.3, 0.3);
-    
-    m_frontSpark.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    m_backSpark.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+    back.closedLoop
+    .p(0.1)
+    .i(0)
+    .d(0)
+    .outputRange(-0.3, 0.3);
+   front.inverted(true); 
+    m_frontSpark.configure(front, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_backSpark.configure(back, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     }
 private void LifttoPosition(double Position){
