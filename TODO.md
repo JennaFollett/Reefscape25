@@ -1,20 +1,20 @@
 # TODO
 
 ## Priority A
-[ x] Add subsystems/controls for `Intake` (will be similar to `Cageclimb` and `Runcage`)
+  [x] Add subsystems/controls for `Intake` (will be similar to `Cageclimb` and `Runcage`)
   [x] Spark max, brushed motor, on/off
 [ ] Position control for `Armnudge`/`Arm`
   [x] Tune min/max position values in `Arm`
   [x] Tune min/max power in `Arm`
   [ ] Tune PID in `Arm`
   [ ] Tune nudge multiplier in `Armnudge`
-[ ] Tune nudge multiplier in `Liftnudge`
-[ ] Validate driving works
+  [ ] Tune nudge multiplier in `Liftnudge`
+  [ ] Validate driving works
   [ ] Decide if using field relative
     [ ] If yes, add NavX to robot 
     [ ] If yes, verify `AHRS` in `DriveTrain` is correct port (probably should be using SPI instead of USB)
     [ ] If yes, validate using shuffleboard field that orientation works correctly
-[ ] Adjust lift positions in `Lift` to reach proper spots on net/reef
+  [ ] Adjust lift positions in `Lift` to reach proper spots on net/reef
 
 ## Priority B
 

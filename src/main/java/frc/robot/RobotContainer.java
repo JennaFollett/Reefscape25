@@ -17,6 +17,7 @@ import frc.robot.subsystems.Cageclimb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrainBase;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.TestDriveTrain;
 import edu.wpi.first.math.MathUtil;
@@ -41,7 +42,7 @@ public class RobotContainer {
   private final Lift m_lift = new Lift();
   private final Arm m_arm = new Arm();
   private final Cageclimb m_cage = new Cageclimb();
-
+  private final Intake m_intake = new Intake();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -73,6 +74,9 @@ public class RobotContainer {
     m_driveTrain.setDefaultCommand(
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
+
+
+        //                                                                                 CONTROLLER CONTROLS
         new DefaultDrive(
            m_driveTrain,
             () -> -m_driverController.getLeftY(),
@@ -87,7 +91,21 @@ m_lift.setDefaultCommand(new Liftnudge(m_lift, ()-> MathUtil.applyDeadband( m_co
 m_cage.setDefaultCommand(new RunCommand(()->m_cage.Run(0), m_cage));
 m_copilotController.povUp().whileTrue(new RunCommand(()->m_cage.Run(0.2), m_cage));
 m_copilotController.povDown().whileTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage));
-
+m_copilotController.rightTrigger().onTrue(new RunCommand(()-> m_intake.Run(0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
+m_copilotController.leftTrigger().onTrue(new RunCommand(()-> m_intake.Run(-0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
+m_copilotController.rightTrigger().onTrue(new RunCommand(()-> m_arm.NudgeVelocity(.5),m_arm)).onFalse(new RunCommand(()->m_arm.NudgeVelocity(0), m_arm));
+m_copilotController.leftTrigger().onTrue(new RunCommand(()-> m_arm.NudgeVelocity(-.5),m_arm)).onFalse(new RunCommand(()->m_arm.NudgeVelocity(0), m_arm));
+//m_copilotController.rightBumper().runOnce(new RunCommand(()-> m_arm.Nudge(.5),m_arm));
+//m_copilotController.leftBumper().runOnce(new RunCommand(()-> m_arm.Nudge(-.5),m_arm));
+//                                                                                        BUTTON BOX CONTROLS
+m_copilotButtonbox.button(4).onTrue(m_lift.LifttopositionCommand(Lift.positionL1));
+m_copilotButtonbox.button(2).onTrue(m_lift.LifttopositionCommand(Lift.positionL2));
+m_copilotButtonbox.button(1).onTrue(m_lift.LifttopositionCommand(Lift.positionL3));
+m_copilotButtonbox.button(3).onTrue(m_lift.LifttopositionCommand(Lift.positionL4));
+m_copilotButtonbox.button(5).onTrue(m_lift.LifttopositionCommand(Lift.positionNet));
+m_copilotButtonbox.button(6).onTrue(m_lift.LifttopositionCommand(Lift.positionFloor));
+m_copilotButtonbox.button(7).onTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage)).onFalse (new RunCommand(()->m_cage.Run(0), m_cage));
+m_copilotButtonbox.button(8).onTrue(new RunCommand(()->m_cage.Run(0.2), m_cage)).onFalse (new RunCommand(()->m_cage.Run(0), m_cage));
   }
 
   /**

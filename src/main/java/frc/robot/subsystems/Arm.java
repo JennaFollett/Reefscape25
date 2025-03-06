@@ -17,6 +17,7 @@ public class Arm extends SubsystemBase {
     SparkFlex m_armSpark = new SparkFlex(CANIds.kTestarmMotor, MotorType.kBrushless);
     SparkClosedLoopController m_controller = m_armSpark.getClosedLoopController();
     private double targetposition = 0;
+    private double targetVelocity = 0;
     public static final double Floorarm = -38.6;
     public static final double Spitarm = -10;
 public Arm() {
@@ -29,7 +30,7 @@ config.closedLoop
     .i(0)
     .d(0)
     .outputRange(-0.3, 0.3);
-
+//config.absoluteEncoder.velocityConversionFactor
 m_armSpark.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 }
 public Command ArmtopositionCommand(double Position){
@@ -46,7 +47,12 @@ targetposition += Nudgevalue;
 targetposition = MathUtil.clamp(targetposition,-38.6,7.5);
 m_controller.setReference(targetposition, ControlType.kPosition);
 }
-
+public void NudgeVelocity(double Nudgevalue){
+    targetVelocity = Nudgevalue;
+    targetVelocity = MathUtil.clamp(targetVelocity,-10,10);
+    m_controller.setReference(targetVelocity, ControlType.kVelocity);
+    }
+    
 
 }
 
