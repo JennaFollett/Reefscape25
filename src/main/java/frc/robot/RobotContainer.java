@@ -91,12 +91,26 @@ m_lift.setDefaultCommand(new Liftnudge(m_lift, ()-> MathUtil.applyDeadband( m_co
 m_cage.setDefaultCommand(new RunCommand(()->m_cage.Run(0), m_cage));
 m_copilotController.povUp().whileTrue(new RunCommand(()->m_cage.Run(0.2), m_cage));
 m_copilotController.povDown().whileTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage));
-m_copilotController.rightTrigger().onTrue(new RunCommand(()-> m_intake.Run(0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
-m_copilotController.leftTrigger().onTrue(new RunCommand(()-> m_intake.Run(-0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
-m_copilotController.rightTrigger().onTrue(new RunCommand(()-> m_arm.NudgeVelocity(.5),m_arm)).onFalse(new RunCommand(()->m_arm.NudgeVelocity(0), m_arm));
-m_copilotController.leftTrigger().onTrue(new RunCommand(()-> m_arm.NudgeVelocity(-.5),m_arm)).onFalse(new RunCommand(()->m_arm.NudgeVelocity(0), m_arm));
-//m_copilotController.rightBumper().runOnce(new RunCommand(()-> m_arm.Nudge(.5),m_arm));
-//m_copilotController.leftBumper().runOnce(new RunCommand(()-> m_arm.Nudge(-.5),m_arm));
+// m_copilotController.rightTrigger().onTrue(new RunCommand(()-> m_intake.Run(0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
+// m_copilotController.leftTrigger().onTrue(new RunCommand(()-> m_intake.Run(-0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
+
+m_copilotController.rightBumper().whileTrue(new RunCommand(() -> m_arm.Run(45), m_arm)).onFalse(new RunCommand(()-> m_arm.Run(0), m_arm));
+m_copilotController.leftBumper().whileTrue(new RunCommand(() -> m_arm.Run(-45), m_arm)).onFalse(new RunCommand(()-> m_arm.Run(0), m_arm));
+
+m_intake.setDefaultCommand(new RunCommand(()->{
+  double min = 0.001;
+  double right = m_copilotController.getRightTriggerAxis();
+  double left = m_copilotController.getLeftTriggerAxis();
+  if (right > min){
+    m_intake.Run(right);
+  }
+  else if (left > min){
+    m_intake.Run(-left);
+  }
+  else{
+    m_intake.Run(0.0);
+  }
+}, m_intake));
 //                                                                                        BUTTON BOX CONTROLS
 m_copilotButtonbox.button(4).onTrue(m_lift.LifttopositionCommand(Lift.positionL1));
 m_copilotButtonbox.button(2).onTrue(m_lift.LifttopositionCommand(Lift.positionL2));

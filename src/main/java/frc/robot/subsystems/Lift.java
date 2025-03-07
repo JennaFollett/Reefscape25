@@ -42,13 +42,13 @@ front.closedLoop
     .p(0.1)
     .i(0)
     .d(0)
-    .outputRange(-0.5, 0.5);
+    .outputRange(-0.25, 0.25);
 
     back.closedLoop
     .p(0.1)
     .i(0)
     .d(0)
-    .outputRange(-0.5, 0.5);
+    .outputRange(-0.25, 0.25);
    front.inverted(true); 
     m_frontSpark.configure(front, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     m_backSpark.configure(back, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
