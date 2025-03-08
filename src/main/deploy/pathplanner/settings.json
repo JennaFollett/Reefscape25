@@ -14,7 +14,7 @@
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.0455,
   "driveGearing": 8.14,
-  "maxDriveSpeed": 3.1,
+  "maxDriveSpeed": 4.1,
   "driveMotorType": "vortex",
   "driveCurrentLimit": 40.0,
   "wheelCOF": 1.2,
@@ -28,5 +28,8 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.15,\"y\":-0.2},\"end\":{\"x\":-0.15,\"y\":0.2},\"strokeWidth\":0.02}}",
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.1,\"y\":0.15},\"end\":{\"x\":-0.1,\"y\":-0.15},\"strokeWidth\":0.02}}"
+  ]
 }

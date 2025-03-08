@@ -57,7 +57,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    //   autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+      // autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     //SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
@@ -79,18 +79,23 @@ public class RobotContainer {
         //                                                                                 CONTROLLER CONTROLS
         new DefaultDrive(
            m_driveTrain,
-            () -> -m_driverController.getLeftY(),
-            () -> -m_driverController.getLeftX(),
-            () -> -m_driverController.getRightX()));
-m_lift.setDefaultCommand(new Liftnudge(m_lift, ()-> MathUtil.applyDeadband( m_copilotController.getLeftY(),0.2)));
-            m_copilotController.y().onTrue(m_lift.LifttopositionCommand(Lift.positionL2));
-            m_copilotController.b().onTrue(m_lift.LifttopositionCommand(Lift.positionL3));
-            m_copilotController.a().onTrue(m_lift.LifttopositionCommand(Lift.positionL4));
-            m_copilotController.x().onTrue(m_lift.LifttopositionCommand(Lift.positionNet));
+           ()->Math.signum(m_driverController.getLeftY()) * Math.pow(m_driverController.getLeftY(),2),
+           ()->Math.signum(m_driverController.getLeftX()) * Math.pow(m_driverController.getLeftX(),2),
+           ()->Math.signum(m_driverController.getRightX()) * Math.pow(m_driverController.getRightX(),2)));
+            //() -> -m_driverController.getLeftY(),
+            //() -> -m_driverController.getLeftX(),
+            //() -> -m_driverController.getRightX()));
+// m_lift.setDefaultCommand(new Liftnudge(m_lift, ()-> MathUtil.applyDeadband( m_copilotController.getLeftY(),0.2)));
+m_copilotController.povUp().whileTrue(new Liftnudge(m_lift, ()->0.2 ));
+m_copilotController.povDown().whileTrue(new Liftnudge(m_lift, ()->-0.2 ));
+            m_copilotController.y().onTrue(m_arm.ArmtopositionCommand(Arm.Spitarm));
+            m_copilotController.b().onTrue(m_arm.ArmtopositionCommand(Arm.Middlearm));
+            m_copilotController.a().onTrue(m_arm.ArmtopositionCommand(Arm.Floorarm));
+           m_copilotController.x().onTrue(m_arm.ArmtopositionCommand(Arm.Reefarm));
             m_arm.setDefaultCommand(new Armnudge(m_arm, ()-> MathUtil.applyDeadband( m_copilotController.getRightY(),0.2)));
 m_cage.setDefaultCommand(new RunCommand(()->m_cage.Run(0), m_cage));
-m_copilotController.povUp().whileTrue(new RunCommand(()->m_cage.Run(0.2), m_cage));
-m_copilotController.povDown().whileTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage));
+//m_copilotController.povUp().whileTrue(new RunCommand(()->m_cage.Run(0.2), m_cage));
+//m_copilotController.povDown().whileTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage));
 // m_copilotController.rightTrigger().onTrue(new RunCommand(()-> m_intake.Run(0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
 // m_copilotController.leftTrigger().onTrue(new RunCommand(()-> m_intake.Run(-0.4),m_intake)).onFalse(new RunCommand(()->m_intake.Run(0), m_intake));
 
@@ -111,15 +116,15 @@ m_intake.setDefaultCommand(new RunCommand(()->{
     m_intake.Run(0.0);
   }
 }, m_intake));
-//                                                                                        BUTTON BOX CONTROLS
+//                                                                                                   BUTTON BOX CONTROLS
 m_copilotButtonbox.button(4).onTrue(m_lift.LifttopositionCommand(Lift.positionL1));
 m_copilotButtonbox.button(2).onTrue(m_lift.LifttopositionCommand(Lift.positionL2));
 m_copilotButtonbox.button(1).onTrue(m_lift.LifttopositionCommand(Lift.positionL3));
 m_copilotButtonbox.button(3).onTrue(m_lift.LifttopositionCommand(Lift.positionL4));
 m_copilotButtonbox.button(5).onTrue(m_lift.LifttopositionCommand(Lift.positionNet));
 m_copilotButtonbox.button(6).onTrue(m_lift.LifttopositionCommand(Lift.positionFloor));
-m_copilotButtonbox.button(7).onTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage)).onFalse (new RunCommand(()->m_cage.Run(0), m_cage));
-m_copilotButtonbox.button(8).onTrue(new RunCommand(()->m_cage.Run(0.2), m_cage)).onFalse (new RunCommand(()->m_cage.Run(0), m_cage));
+m_copilotButtonbox.button(8).onTrue(new RunCommand(()->m_cage.Run(-0.2), m_cage)).onFalse (new RunCommand(()->m_cage.Run(0), m_cage));
+m_copilotButtonbox.button(7).onTrue(new RunCommand(()->m_cage.Run(0.2), m_cage)).onFalse (new RunCommand(()->m_cage.Run(0), m_cage));
   }
 
   /**

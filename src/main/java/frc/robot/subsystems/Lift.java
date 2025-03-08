@@ -25,8 +25,8 @@ private double targetposition = 0;
 public static final double positionFloor = 0;
 public static final double positionL1 = 10;
 public static final double positionL2 = 20;
-public static final double positionL3 = 30;
-public static final double positionL4 = 40;
+public static final double positionL3 = 40;
+public static final double positionL4 = 50;
 public static final double positionNet = 60;
 
 

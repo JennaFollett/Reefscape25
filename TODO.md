@@ -18,8 +18,8 @@
 
 ## Priority B
 
-[ ] Version control - Do another git commit
-[ ] Version control - Push to github
+[x] Version control - Do another git commit
+[x] Version control - Push to github
 [ ] Shuffleboard - Add more troubleshooting diagnostics for each subsystem/component
 [ ] Path Planner Autons
   [x] DriveTrain - Add `AutoBuilder` / `RobotConfig`

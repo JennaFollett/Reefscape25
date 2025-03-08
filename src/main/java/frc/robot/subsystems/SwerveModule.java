@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants;
+import frc.robot.Constants.CANIds;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule implements ISwerveModule{
@@ -76,6 +77,7 @@ SwerveTab.addDouble("Turn Encoder Angle" + turningEncoderCanID,()-> m_turnEncode
 SwerveTab.addDouble("Drive PID SP" + turningEncoderCanID,()->m_drivePIDController.getSetpoint() );
 SwerveTab.addDouble("Drive PID Error" + turningEncoderCanID,()->m_drivePIDController.getPositionError() );
 SwerveTab.addDouble("Drive Motor Volocity" + turningEncoderCanID, ()->m_driveMotor.getEncoder().getVelocity()* Constants.ModuleConstants.kMotorRPM2MPS);
+
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);

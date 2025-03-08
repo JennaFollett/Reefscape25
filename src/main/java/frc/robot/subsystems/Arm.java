@@ -21,13 +21,14 @@ public class Arm extends SubsystemBase {
     SparkClosedLoopController m_controller = m_armSpark.getClosedLoopController();
     private double targetposition = 0;
     private double targetvelocity = 0;
-    public static final double Floorarm = -38.6;
+    public static final double Floorarm = -105; //-38.6
+    public static final double Reefarm = -50;
     public static final double Spitarm = -10;
+    public static final double Middlearm = 0;
 
-    public static final double SoftLimitMax = 7.5;
-    public static final double SoftLimitMin = -100.0; //-38.6;
-    public static final double SoftSpeedLimit = 90;
-
+    public static final double SoftLimitMax = 12; //7.5
+    public static final double SoftLimitMin = -180.0; //-38.6; //-100
+    public static final double SoftSpeedLimit = 20; //90
 
     public Arm() {
 
@@ -43,7 +44,7 @@ public class Arm extends SubsystemBase {
         // Set PID gains
         config.closedLoop
             // Position control in slot 0
-            .p(0.1, ClosedLoopSlot.kSlot0)
+            .p(0.01, ClosedLoopSlot.kSlot0)
             .i(0, ClosedLoopSlot.kSlot0)
             .d(0, ClosedLoopSlot.kSlot0)
             .outputRange(-0.3, 0.3, ClosedLoopSlot.kSlot0)
